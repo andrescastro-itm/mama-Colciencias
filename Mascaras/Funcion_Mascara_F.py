@@ -6,7 +6,7 @@
     Entradas: 
         - ruta1: Es la ruta en la que se encuentra la secuencia almacenada en .nrrd para el estudio deseado
         - ruta2: Es la ruta donde se desean guardar las máscaras
-        - csv: Es la fila del csv que ocntiene los datos del ROI a extraer
+        - csv: Es la fila del csv que contiene los datos del ROI a extraer
         - coo: Es un vector con las posiciones del csv que contienen las coordenadas del centro de ROI [x, y, z]
         - lon: Es un vector con las posiciones del csv que contienen las longitudes del ROI a lo largo de los ejes [x,y,z]
 
