@@ -14,13 +14,15 @@ import nrrd
 csv=np.loadtxt('/ruta a csv con información de los ROIs/Data_3_slices.csv',
                delimiter=',',dtype='str',encoding='latin1')
 
-Pat1='/home/dianamarin/6.ROIS MRI/CDR_PACS_NRRD/'  #Direccion de estudios en NRRD
+Pat1='/Dirección a carpeta con estudios en nrrd/Estudios/'
 Rutas=np.array([])
 
+# Obtener una lista con todas las rutas en Pat1
 for directorio,_,subdirectorio in os.walk(Pat1):
     for archivo in subdirectorio:
         Rutas= np.append(Rutas, os.path.join(directorio, archivo))
 
+# Función para encontrar la ruta de un estudio (name=MRI_1) en una secuencia específica (secuencias=DIFUSION)
 def encontrar_ruta_nrrd(name,secuencia):
     for i in range(0,len(Rutas)):
         if name +'/' in Rutas[i]:
@@ -29,12 +31,14 @@ def encontrar_ruta_nrrd(name,secuencia):
 
 
 parametros='/ruta al archivo .yaml que indica las caractersticas a extraer y los parámetros/Params.yaml'
+
+# EXTRAER CARACTERÍSTICAS Y GUARDARLAS EN features_2 CON TODA LA INFORMACIÓN DE LOS ROIS
 encabezado=[]
 
 for i in range(1,len(csv)):
 
     ruta_imagen = encontrar_ruta_nrrd(csv[i, 0], csv[i, 2])
-    ruta_mascara='/home/dianamarin/6.ROIS MRI/CDR_PACS_NRRD/' + csv[i,0] + '/' + 'Mascaras_3S' + '/' + csv[i,0] + '' + csv[i,1] + '' + \
+    ruta_mascara='/Dirección a carpeta con estudios en nrrd/Estudios/' + csv[i,0] + '/' + 'Mascaras' + '/' + csv[i,0] + '' + csv[i,1] + '' + \
                  csv[i,2] + '.nrrd'
                  
     extractor = featureextractor.RadiomicsFeaturesExtractor(parametros)
