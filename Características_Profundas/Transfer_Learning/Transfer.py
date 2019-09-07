@@ -36,9 +36,7 @@ layer_name = 'res2a_branch2b'
 intermediate_layer_model = Model(inputs=model.input,outputs=model.get_layer(layer_name).output)
 Features_block1_conv2 = intermediate_layer_model.predict(x)
 
-#np.save('/home/dianamarin/6.ROIS MRI/DEEP_AND_RADIOMICS_FEATURES/Transferencia/Caracteristicas_ResNet/F2_F_Trans_r5c_b2c_(2048F)146_224x3.npy',Features_block1_conv2)
 
-#np.save('/home/dianamarin/6.ROIS MRI/DEEP_AND_RADIOMICS_FEATURES/Transferencia/y_ALL.npy',y)
 
 
 
