@@ -14,7 +14,6 @@ function [Ker, Sig] = kernel_Train(X, Kth)
 % 
 % AUTORES:
 %     - Henry Jhoán Areiza
-%     - Diana Marcela Marín
 %     - Carlos Andrés Duarte
 %     - Andrés Eduardo Castro
 %     - Gloria Mercedes Díaz
