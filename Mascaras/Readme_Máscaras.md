@@ -9,5 +9,7 @@ La ejecución del código debe ser realizada desde **main_mascaras.py**, en el c
 | MRI_#  	| R# 	| DIFUSION 	| 66.91  | 90.08  | 29  | 19.13  | ....  | ARTEFACTO  |
 
 
-**main_mascaras.py** se encarga de búscar la ruta de cada secuencia (ADC, DIFUSION, FASE1) en cada estudio para generar las máscaras de todos los ROIS en cada una, utilizando la función **mascara2d_3d**, por lo cual, los nombres con los que aparecen listados los estudios y secuencias en el archivo csv son los mismos con los mismos que aparecen en la carpeta Estudios
+**main_mascaras.py** se encarga de búscar la ruta de cada secuencia (ADC, DIFUSION, FASE1) en cada estudio para generar las máscaras de todos los ROIS en cada una, utilizando la función **mascara2d_3d**, por lo cual, 
+```los nombres con los que aparecen listados los estudios y secuencias en el archivo csv son los mismos con los mismos que aparecen en la carpeta Estudios
+```
 
