@@ -16,7 +16,6 @@ function mod = glmksvm_train_LS(tra, par)
 % 
 % AUTORES:
 %     - Henry Jhoán Areiza
-%     - Diana Marcela Marín
 %     - Carlos Andrés Duarte
 %     - Andrés Eduardo Castro
 %     - Gloria Mercedes Díaz
