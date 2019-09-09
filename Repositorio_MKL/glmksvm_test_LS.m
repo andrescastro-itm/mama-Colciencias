@@ -17,7 +17,6 @@ function out = glmksvm_test_LS(tes, mod)
 % 
 % AUTORES:
 %     - Henry Jhoán Areiza
-%     - Diana Marcela Marín
 %     - Carlos Andrés Duarte
 %     - Andrés Eduardo Castro
 %     - Gloria Mercedes Díaz
