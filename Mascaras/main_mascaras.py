@@ -7,13 +7,13 @@ from Funcion_Mascara_F import mascara2d_3d
 
 
 
-csv=np.loadtxt('/home/dianamarin/6.ROIS MRI/Generar_Mascaras/DATA_FINAL/Data_3_slices.csv',
+csv=np.loadtxt('Rita a archivo csv con los datos de cada estudio y sus ROIS/Data_3_slices.csv',
                delimiter=',',dtype='str',encoding='latin1')
 
 
-Pat1='/home/dianamarin/6.ROIS MRI/CDR_PACS_NRRD'   # Path a todos estudios guardados en nrrd 
+Pat1='/ruta a todos estudios guardados en nrrd/Estudios'
 
-ruta2='/media/dianamarin/Nuevo vol2/Prueba_Mascaras/'  # Ruta de guardado
+ruta2='/Ruta de guardado/Mascaras/' 
 
 Rutas=np.array([])
 
@@ -34,8 +34,6 @@ def encontrar_ruta_nrrd(name,secuencia):
 for i in range(1,len(csv)):
     ruta1=encontrar_ruta_nrrd(csv[i,0],csv[i,2]) # Ruta del estudio específico
     print(i)
-    #print('ESTUDIO',csv[i,0])
-    #print('SECUENCIA',csv[i,2])
     mascara2d_3d(ruta1,ruta2,csv[i],np.array([3,4,5]),np.array([8,8,9]))
     
 
