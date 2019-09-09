@@ -7,7 +7,7 @@ from Funcion_Mascara_F import mascara2d_3d
 
 
 
-csv=np.loadtxt('Rita a archivo csv con los datos de cada estudio y sus ROIS/Data_3_slices.csv',
+csv=np.loadtxt('Ruta a archivo csv con los datos de cada estudio y sus ROIS/Data_3_slices.csv',
                delimiter=',',dtype='str',encoding='latin1')
 
 
