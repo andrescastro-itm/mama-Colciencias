@@ -15,7 +15,6 @@ function Ker = kernel_Pred(X1, X2, Kth, Sig, Sig_Mean, Red)
 % 
 % AUTORES:
 %     - Henry Jhoán Areiza
-%     - Diana Marcela Marín
 %     - Carlos Andrés Duarte
 %     - Andrés Eduardo Castro
 %     - Gloria Mercedes Díaz
