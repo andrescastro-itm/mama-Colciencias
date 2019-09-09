@@ -24,7 +24,6 @@ function [Opt, Acc, F1_Score, Med_geo, Sen, Esp, Relevance, Y_Pred] = K_Folds_Mu
 % 
 % AUTORES:
 %     - Henry Jhoán Areiza
-%     - Diana Marcela Marín
 %     - Carlos Andrés Duarte
 %     - Andrés Eduardo Castro
 %     - Gloria Mercedes Díaz
