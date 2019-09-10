@@ -13,5 +13,17 @@ Las características a extraer utilizando Pyradiomics son activadas en el archiv
 * Neighbouring Gray Tone Difference Matrix
 * Gray Level Dependence Matrix
 
+## Librerías 
 
+* Numpy
+* os
+* six
+* SimpleITK
+* matplotlib
+* nrrd
+* radiomics
+
+## Referencias
+
+* [Pyradiomics](https://pyradiomics.readthedocs.io/en/latest/installation.html)
 
