@@ -15,7 +15,7 @@ La ejecución del código debe ser realizada desde **main_mascaras.py**, en el c
 Finalmente, en la función **mascara2d_3d** son ingresados los datos de ubicación y longitud de cada ROI en x,y,z para generar la máscara binaria.
 
 ## Librerías 
-`Numpy
-os
-SimpleITK
-`
+* Numpy
+* os
+* SimpleITK
+
