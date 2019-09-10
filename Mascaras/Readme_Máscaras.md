@@ -12,4 +12,4 @@ La ejecución del código debe ser realizada desde **main_mascaras.py**, en el c
 **main_mascaras.py** se encarga de búscar la ruta de cada secuencia (ADC, DIFUSION, FASE1) en cada estudio para generar las máscaras de todos los ROIS en cada una, utilizando la función **mascara2d_3d**, por lo cual, `los nombres con los que aparecen listados los estudios y secuencias en el archivo csv son los mismos con los que aparecen en la carpeta Estudios
 `
 
-Finalmente, en la 
+Finalmente, en la función **mascara2d_3d** son ingresados los datos de ubicación y longitud de cada ROI en x,y,z para generar la máscara binaria.
