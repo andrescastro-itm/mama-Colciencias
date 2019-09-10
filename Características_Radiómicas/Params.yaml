@@ -46,10 +46,10 @@ setting:
 imageType:
   Original: {} # for dictionaries / mappings, None values are not allowed, '{}' is interpreted as an empty dictionary
   
-  #Wavelet: {}
+  Wavelet: {}
    
-  #LBP3D:
-    #binWidth: 64 #    
+  LBP3D:
+    binWidth: 64 #    
     
 
 # Featureclasses, from which features must be calculated. If a featureclass is not mentioned, no features are calculated
