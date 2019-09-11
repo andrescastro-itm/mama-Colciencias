@@ -4,24 +4,24 @@ Este código principal se encarga de llamar las funciones necesarias para realiz
 
 En este ejemplo se ejecutan dos pruebas, la primera de ellas hace uso únicamente de las fuentes correspondientes a las características perceptuales, la segunda hace uso de las características perceptuales y las características radiómicas al mismo tiempo.
 
-REFERENCIAS: 
+##REFERENCIAS: 
 * Gönen, M., & Alpaydın, E. (2011). Multiple kernel learning
        algorithms. Journal of machine learning research, 12(Jul),
        2211-2268.
 * "Self-tuning spectral clustering" (Zelnik-Manor, 2004). 
  
-ARCHIVOS REQUERIDOS:
+##ARCHIVOS REQUERIDOS:
 * Data_Cancer.mat
  
-ARCHIVOS GENERADOS:
+##ARCHIVOS GENERADOS:
 * Resul_saliencia
 * Resul_completo
  
-TOOLBOX REQUERIDOS:
+##TOOLBOX REQUERIDOS:
 * LIBSVM --> http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 * MKL    --> http://www.cmpe.boun.edu.tr/~gonen/mkl
  
-AUTORES:
+###AUTORES:
 - Henry Jhoán Areiza
 - Diana Marcela Marín
 - Carlos Andrés Duarte
