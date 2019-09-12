@@ -1,6 +1,24 @@
 function FeatEstudio = featsaly3(Roi_MRI)
 
-gbvs_install;
+% ENTRADAS
+%   - Roi_MRI     --> Regiones extraídas, ordenadas por el numero del ROI en el estudio.
+% SALIDAS
+%   - FeatEstudio --> Características de Saliencia y medidas estadísticas de primer orden
+%                     ordenadas por el numero del ROI en el estudio.
+% FUNCIONES USADAS
+%   - gbvs               --> genera las características de Saliencia basadas en
+%                            GBVS.
+%   - GetSkewAndKurtosis --> Calcula las medidas estadísticas de primer
+%                            orden con base al hitograma.
+% AUTORES:
+%   - Henry Jhoán Areiza
+%   - Carlos Andrés Duarte
+%   - Andrés Eduardo Castro
+%   - Gloria Mercedes Díaz
+
+% Especifique en la funcion "gbvs_install" la direccion donde se encuentre
+% almacenado el Toolbox GBVS.
+gbvs_install;%
 
 
 %for i=1:length(fieldnames(Roi_MRI))

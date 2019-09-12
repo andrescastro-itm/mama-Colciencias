@@ -1,5 +1,22 @@
 
 function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD)
+% Extraer las ROI de la secuencia Dinamico, fue un caso especial, debido a
+% que en esta se encuentran embebidas 6 secuencias, por esta razón
+% fue necesario generar un Script diferente.
+%
+% ENTRADAS
+%   - imgSec  --> Dinamico embebido.
+%   - coord   --> Coordenadas de la ROI. Se usaron las mismas que en la secuencia
+%                 Fase1.
+%   - subDirD --> Direccion donde se desee guardar las ROIs como DICOM.
+%
+% AUTORES:
+%   - Henry Jhoán Areiza
+%   - Carlos Andrés Duarte
+%   - Andrés Eduardo Castro
+%   - Gloria Mercedes Díaz
+
+
 % lectura y separacion del dinamico     
     serieD =[];
     dataEstuD = [];
