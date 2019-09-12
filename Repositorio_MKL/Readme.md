@@ -8,7 +8,7 @@ En este ejemplo se ejecutan dos pruebas, la primera de ellas hace uso únicament
 * Gönen, M., & Alpaydın, E. (2011). Multiple kernel learning
        algorithms. Journal of machine learning research, 12(Jul),
        2211-2268.
-* "Self-tuning spectral clustering" (Zelnik-Manor, 2004). 
+* Zelnik-Manor, L., & Perona, P. (2005). Self-tuning spectral clustering. In Advances in neural information processing systems (pp. 1601-1608). 
  
 ## ARCHIVOS REQUERIDOS:
 * Data_Cancer.mat
