@@ -2,7 +2,7 @@
 
 El proceso inicial de extracción requiere de un archivo CSV generado a través de un plugin del software Osirix, este archivo contiene toda la información de la ROI, como es el caso de las coordenadas. En el segundo proceso, se tuvo en cuenta dos tipos de características, perceptuales con el modelo **GBVS** y las medidas estadísticas de primer orden. Esta última se obtienen de los mapas generados por las características perceptuales.
 
-Para mayor claridad del proceso de extracción y caracterización de las ROIs, puede revisar el informe **Analisis_de_relevancia_computacional**
+Para mayor claridad del proceso de extracción y caracterización de las ROIs, puede revisar el informe **Analisis_de_relevancia_computacional**.
 
 
 ## TOOLBOX REQUERIDOS:
