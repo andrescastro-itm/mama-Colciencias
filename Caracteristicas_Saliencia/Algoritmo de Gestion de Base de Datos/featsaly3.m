@@ -1,4 +1,4 @@
-function FeatEstudio = featsaly3(Roi_MRI)
+function FeatEstudio = featsaly3(Roi_MRI, rootGVBS, Rsize)
 
 % ENTRADAS
 %   - Roi_MRI     --> Regiones extraídas, ordenadas por el numero del ROI en el estudio.
@@ -18,7 +18,7 @@ function FeatEstudio = featsaly3(Roi_MRI)
 
 % Especifique en la funcion "gbvs_install" la direccion donde se encuentre
 % almacenado el Toolbox GBVS.
-gbvs_install;%
+gbvs_install(rootGVBS);%
 
 
 %for i=1:length(fieldnames(Roi_MRI))
@@ -28,13 +28,13 @@ gbvs_install;%
 paciente = fieldnames(Roi_MRI);
 
 
-FeatEstudio = []
+FeatEstudio = [];
 
 for i=1:length(paciente)%1:length(fieldnames(getfield(Roi_MRI,['Roi_Brest_Mri_',num2str(1)])))
     
-    rois=getfield(Roi_MRI,paciente{i})
+    rois=getfield(Roi_MRI,paciente{i});
     NRoi=fieldnames(rois);
-    Feature = []
+    Feature = [];
     
     for j=1:length(NRoi)
         
@@ -43,15 +43,26 @@ for i=1:length(paciente)%1:length(fieldnames(getfield(Roi_MRI,['Roi_Brest_Mri_',
         label_2=getfield(Serie,'label_2');
         Serie=rmfield(Serie,'label_1');
         Serie=rmfield(Serie,'label_2');
-        nameSerie = fieldnames(Serie)
+        Serie=rmfield(Serie,'Bi_Rads');
+                
+        if isfield(Serie,'Comentario')
+             Serie=rmfield(Serie,'Comentario');
+        end
+        nameSerie = fieldnames(Serie);
         
         for x=1:length(nameSerie)
-            
+            img=[];
             img = getfield(Serie,nameSerie{x});
             if ( strcmp(class(img),'double') == 1 ) img = uint16(img*65535); end %double(img)/((2^16)-1);
             
+            imgR = [];
+            if Rsize ~= 0
+              imgR = imresize(img,[Rsize Rsize]);
+            else
+                imgR = img;
+            end
             map=[];
-            map = gbvs(img);
+            map = gbvs(imgR);
             
             sal(x).name=nameSerie{x};
 
@@ -125,7 +136,7 @@ for i=1:length(paciente)%1:length(fieldnames(getfield(Roi_MRI,['Roi_Brest_Mri_',
             moments(x).region{1} = meanGL;            %Desviacion Estandar - momento 2
             moments(x).region{2} = varianceGL;
             %Skewness - momento 3
-            moments(x).region{3} = skew
+            moments(x).region{3} = skew;
             %Kurtosis - momento 4
             moments(x).region{4} = kurtosis;
             %Varianza - momento 5
@@ -250,14 +261,17 @@ for i=1:length(paciente)%1:length(fieldnames(getfield(Roi_MRI,['Roi_Brest_Mri_',
             %Entropia - momento 6
             %moments(z).Saliency{6} = -sum(histo(z).Saliency(:,1).*log2(histo(z).Saliency(:,1)));
             %moments(z).label=label;
+            fprintf('characterization - %s',paciente{i});fprintf(' - %s', NRoi{j});fprintf(' - %s', nameSerie{x});fprintf('\n');
+            
         end
         
-        Feature=setfield(Feature,NRoi{j},'Momentos',moments)
-        Feature=setfield(Feature,NRoi{j},'Label_1',label_1)
-        Feature=setfield(Feature,NRoi{j},'Label_2',label_2)
+        Feature=setfield(Feature,NRoi{j},'Momentos',moments);
+        Feature=setfield(Feature,NRoi{j},'Label_1',label_1);
+        Feature=setfield(Feature,NRoi{j},'Label_2',label_2);
+        
     end
     
-    FeatEstudio = setfield(FeatEstudio,paciente{i},Feature)
+    FeatEstudio = setfield(FeatEstudio,paciente{i},Feature);
 
 end
 end

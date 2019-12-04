@@ -1,5 +1,5 @@
 
-function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD)
+function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD,sh)
 % Extraer las ROI de la secuencia Dinamico, fue un caso especial, debido a
 % que en esta se encuentran embebidas 6 secuencias, por esta razón
 % fue necesario generar un Script diferente.
@@ -22,7 +22,7 @@ function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD)
     dataEstuD = [];
     List_RoiD=[];
      bj=0;
-     bd=0
+     bd=0;
      for ii = 1:round(length(imgSec)/6)
          for jj = 1:6
              if (mod(length(imgSec),6)~=0 & ii==round(length(imgSec)/6) & jj==6)
@@ -49,8 +49,8 @@ function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD)
         
         %Direccion del direcitorio donde quedara almacenada las variables o
         %imagenes en su defecto.
-        dirDIn =[subDirD,'\','Dinamico',num2str(di)]
-        mkdir(dirDIn)
+        dirDIn =[subDirD,'\','Dinamico',num2str(di)];
+        mkdir(dirDIn);
          
         for ro =1:length(cordin.Roi)
          % Asignacion de Coordenadas
@@ -77,30 +77,48 @@ function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD)
             regD = imcrop(imagenD,roiI);
             regionD(:,:,ic)=regD;
             ic=ic+1;
-% 
-            figure(1)
-            imshow(imagenD,[])
-            hold on
-            rectangle('Position',roiI,'EdgeColor','r')
-            plot((x_centro),(y_centro),'+')
-            pause(0.9)
+            if sh==1
+                figure(1)
+                imshow(imagenD,[])
+                hold on
+                rectangle('Position',roiI,'EdgeColor','r')
+                plot((x_centro),(y_centro),'+')
+                pause(0.5)
+            end
          end
 
          [X Y Z] = size(regionD);
          for it=1:Z
-% 
-            figure(2)
-            imshow(regionD(:,:,it),[]) % punto en la 4
-            hold on 
-            plot((x_centro-x_anI),(y_centro-y_anI),'+')%punto de interes.
-            hold off
-            pause(0.9)
+            if sh==1
+                figure(2)
+                imshow(regionD(:,:,it),[]) % punto en la 4
+                hold on 
+                plot((x_centro-x_anI),(y_centro-y_anI),'+')%punto de interes.
+                hold off
+                pause(0.5)
+            end
+            if Z>1
+                % Redimencionar la imagen
+%                 if Wi==1
+%                     reOrg=uint16([]);
+%                     re=uint16([]);
+%                     reOrg=regionD;
+%                     re= imresize(regionD(:,:,it),[128 128]);%imresize(A,[numrows numcols]);
+%                     regionD=uint16([]);
+%                     regionD=re;
+%                 end
+                dicomwrite(regionD(:,:,it),[dirDIn,'\',cordin.Roi,'_Dinamico_',num2str(di),'.dcm']);%%%%
+            end
 
          end
         
-        serieD=setfield(serieD,[cordin.Roi{ro},'_Dinamico',num2str(di)],regionD)
-        List_RoiD=setfield(List_RoiD,['Roi_',cordin.Roi{ro}(2)],[cordin.Roi{ro},'_Dinamico',num2str(di)],regionD)
-
+        serieD=setfield(serieD,[cordin.Roi{ro},'_Dinamico',num2str(di)],regionD);
+        List_RoiD=setfield(List_RoiD,['Roi_',cordin.Roi{ro}(2)],[cordin.Roi{ro},'_Dinamico',num2str(di)],regionD);
+        
+        serie=['_Dinamico',num2str(di)];
+%         fprintf('Estudio : %s',name);
+        fprintf(' - %s', serie);fprintf(' - %s',cordin.Roi{ro});fprintf('\n');  
+        
         if nargin>2
         save([dirDIn,'\',cordin.Roi{ro},'_Dinamico',num2str(di),'.mat'],'regionD');
         dicomwrite(regionD,[dirDIn,'\',cordin.Roi{ro},'_Dinamico',num2str(di),'.dcm']);
@@ -110,7 +128,7 @@ function [List_RoiD dataEstuD] = dinamiwork(imgSec,coord,subDirD)
         regD =uint16([]);
         close all 
         end
-       dataEstuD = setfield(dataEstuD,['Dinamico',num2str(di)],serieD)
+       dataEstuD = setfield(dataEstuD,['Dinamico',num2str(di)],serieD);
      end
      
      

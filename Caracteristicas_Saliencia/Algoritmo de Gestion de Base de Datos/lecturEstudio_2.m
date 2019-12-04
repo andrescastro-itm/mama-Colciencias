@@ -1,5 +1,5 @@
 
-function [Roi_MRI Roi_Estudios] = lecturEstudio(P,savepaht,N,z,w,h,sh)
+function [Roi_MRI Roi_Estudios] = lecturEstudio(phad,savepaht,N,w,h)
 
 % phad=direccion en la que se encuentran guardados los estudios y la carpeta que
 % contenca los CSV, estos dos deben de estar las palabras Mri y CSV
@@ -16,27 +16,20 @@ function [Roi_MRI Roi_Estudios] = lecturEstudio(P,savepaht,N,z,w,h,sh)
 %
 %W y H es la mitad el ancho y del alto que va a tener la region a recortar,
 %se deben especificar ambas, así estas sean iguales.
-phad=P{1};
+
 tipca='*Mri*';
 tipcsv= '*CSV*';
 folderPac = dir(fullfile(phad,tipca));
-%folderROI = dir(fullfile(phad,tipcsv));
-folderROI = dir(fullfile(P{2},tipca));%dir(fullfile([folderROI.folder,'\',folderROI.name],tipca));
+folderROI = dir(fullfile(phad,tipcsv));
+folderROI = dir(fullfile([folderROI.folder,'\',folderROI.name],tipca));
 
-TAB=readtable(P{3});%('C:\Users\itm\Google Drive\ROI_MRI.xlsx');
+TAB=readtable('C:\Users\itm\Documents\ROI_MRI.xlsx');%('C:\Users\itm\Google Drive\ROI_MRI.xlsx');
 TAB = table2cell(TAB);%xlsread('C:\Users\itm\Google Drive\ROI_MRI.xlsx','slice 2d');
 
 sFase = 'sFase';
 series={};
 
 L=length(folderPac);
-if w~=1
-     Wi=0;
-end
-
-% if w==1
-%     ban=1;
-% end
 
 if ((isempty(N))|(nargin<3))
     vect = 1:L;
@@ -49,9 +42,6 @@ Roi_MRI=[];
 Roi_Estudios=[];
  
 for i = vect
-    if (i == 146 || i==148 || i==153)
-        continue
-    end
    
    %i=12
    fas ='0';
@@ -82,8 +72,8 @@ for i = vect
    
    % cargar los CSV
    name=[folderPac(1).name(1:end-1),num2str(i)];
-   estudio = split(name,'_');%split(folderPac(i).name,'_')
-   FolcsvIn = dir([folderROI(1).folder,'\',[folderROI(3).name(1:10),'_',estudio{3}]]);
+   estudio = split(name,'_')%split(folderPac(i).name,'_')
+   FolcsvIn = dir([folderROI(1).folder,'\',['MRI_',estudio{3}]]);
    
    if (isempty(FolcsvIn))
        disp(['El estudio Breast_Mri_',num2str(i),' no Cuenta con Archivo CSV, por lo que se Continua con el Estudio Siguiente'])
@@ -104,11 +94,7 @@ for i = vect
         zx=1;
 
         tip = tipos{indt};
-        tip = tip(2:end-1);
-        
-        if (strncmp(tip,'DIN',3))%---(strncmp(parts.series,'ST',2) && i==88)------------------
-            continue;
-        end
+        tip = tip(2:end-1)
         
 
 %-----------------------------Leer los estudios y los archivos csv.
@@ -128,21 +114,20 @@ for i = vect
                 csvname = 'FAS';
 
             end
-%             if i>=99%40
-%                 dk=12;
-%             else
-%                 dk=11;
-%             end
-            dk=11;
+            if i>=40
+                dk=11;
+            else
+                dk=10;
+            end
             csvname2 = [FolcsvIn(6).name(1:dk),num2str(i),'_'];%FolcsvIn(3).name(1:12); % punto
 
 %-----------------------------------------------  Leer los estudios
             if ((length(carp)>1) & (tip~=sFase(1:length(tip))))
                max = 0;
                for n = 1:length(carp)
-                   caprIm=[];
+                   caprIm=[]
                    carpIm = dir([carp(n).folder,'\',carp(n).name,'\','*.dcm']); %dir([carp.folder,'\',carp(n).name,'\','*.dcm']); 
-                   L = length(carpIm);
+                   L = length(carpIm)
                    if L>max
                        max=length(carpIm);
                        indMx=n;
@@ -164,26 +149,25 @@ for i = vect
                     end
                     M{8}=char(M{8});
                end
-               subDir = [Dirname,'\',carp(indMx).name];
-               mkdir(subDir);
+               subDir = [Dirname,'\',carp(indMx).name]
+               mkdir(subDir)
 
             elseif (strncmp([tip(1),upper(tip(2:end))],['s',upper('Fase')],5))%(strncmp(tip,'sFase',5))%((length(tip)==length('sFase'))&(tip == 'sFase'))
-                fas = num2str(str2num(fas)+1);
+                fas = num2str(str2num(fas)+1)
                 
                 for n = 1:length(carp)
                     
-                    parts_name = split(carp(n).name,'_');%regexp(carp(n).name , '^(?<letters>\<.+)_(?<rest>.*?)$' , 'names');
-                    parts.letters= parts_name{1};
-                    sust = parts.letters;%parts.letters(1:6); 
+                    parts = regexp(carp(n).name , '^(?<letters>\<.+)_(?<rest>.*?)$' , 'names')
+                    sust = parts.letters(1:6) 
                     sust=[sust(1),upper(sust(2:end))];
-                    SS=[tip(1),upper(tip(2:end)),fas];
+                    SS=[tip(1),upper(tip(2:end)),fas]
 
-                    if strncmp(sust,SS,6)%sust==SS%[tip,fas]strncmp(sust,SS,6)
+                    if sust==SS%[tip,fas]
                         Cind=n;
                         Cname=carp(n).name;
                         FoldIm = dir([carp(n).folder,'\',carp(n).name,'\','*.dcm']);
                         
-                        subDir = [Dirname,'\',carp(n).name];
+                        subDir = [Dirname,'\',carp(n).name]
                         mkdir(subDir)
                         fases{str2num(fas)}=carp(n).name;
 %----------------------------- Leer los CSV solo para las Fases.
@@ -206,8 +190,8 @@ for i = vect
                Cname=carp.name;
                FoldIm = dir([carp.folder,'\',carp.name,'\','*.dcm']);
                series{indt} = carp.name;
-               subDir = [Dirname,'\',carp.name];
-               mkdir(subDir);
+               subDir = [Dirname,'\',carp.name]
+               mkdir(subDir)
 %-----------------------------Leer los CSV.
                pathempty = dir(fullfile([FolcsvIn(3).folder,'\',[csvname2,csvname,'.csv']]));
                if (~isempty(pathempty))
@@ -231,12 +215,12 @@ for i = vect
             imgSec{g,1}= dicomread([FoldIm(g).folder,'\',FoldIm(g).name]);%dicomread([phad,'\',folderPac(i).name,'\',Foldout(3).name,'\',FoldIn(j).name,'\',FoldIm(g).name]);
 
         end
-               
+            
         %%Coredenadas, Lectura del CSV
         %Rname = M(2:end,8); % M{r,8};
-        for r = 1:size(M,1)%length(Rname)  % punto                           %%%%%%%%%% inicia el recorte de la imagen
-         Rname = (M{r,8});%char(str2num(M{r,8}));     
-         corte = split(Rname,'_');
+        for r = 1:size(M,1)%length(Rname)  % punto                           %%%%%%%%%% unicia el recorte de la imagen
+         Rname = (M{r,8})%char(str2num(M{r,8}));     
+         corte = split(Rname,'_')
          
          if (length(corte)==3)%(~isempty(partsII))
              parts.Roi = corte{1};
@@ -261,7 +245,7 @@ for i = vect
          % Igualar las longitudes de el string o cadena.
          TIPO=tip; % se puede sacar del  for falta indicar el codiconal para el caso en el que sea T2W para serlo igual al STIR
          if ((length(tip) == length('ST_COT'))&(tip == 'ST_COT'))|((length(tip) == length('T2W_SPAIR'))&(tip == 'T2W_SPAIR'))
-            TIPO = 'ST'; 
+            TIPO = 'ST' 
          elseif ((length(tip) == length('MAPA'))&(tip == 'MAPA'))
             TIPO = 'ADC';
          elseif ((length(tip) == length('sFase'))&(tip == 'sFase'))
@@ -274,10 +258,6 @@ for i = vect
          elseif length(parts.series)>length(TIPO)
              S=parts.series(1:length(tip));
          end
-         
-         if (strncmp(parts.series,'ST',2) || strncmp(tip,'DIN',3))%---(strncmp(parts.series,'ST',2) && i==88)------------------
-            continue;
-         end
  
          if ((TIPO == S)&(~isempty(pathempty)))%((isempty(busc)) & (tip == parts.secuencia(1:length(tip))))%tip == parts.secuencia
              if parts.Partida=='I'
@@ -287,7 +267,7 @@ for i = vect
                  
                  x_posI = abs(M{r,24}-M{r,24+10});%M{r,24+10};
                  y_posI = abs(M{r,25}-M{r,25+10});%M{r,25+10};
-                 roiI = [x_anI y_anI x_posI y_posI]
+                 roiI = [x_anI y_anI x_posI y_posI];
                  
                  myindices = ~cellfun(@isempty,regexp(M(:,8),[parts.letters,'_','F']));% https://la.mathworks.com/matlabcentral/answers/122439-find-indices-of-string-matches-from-a-cell-array-by-thier-endings
                  invec = 1:size(M,1);
@@ -301,7 +281,7 @@ for i = vect
 
                      x_posF = abs(M{y,24}-M{y,24+10});%M{y,24+10};
                      y_posF = abs(M{y,25}-M{y,25+10});%M{y,25+10};
-                     roiF = [x_anF y_anF x_posF y_posF]
+                     roiF = [x_anF y_anF x_posF y_posF];
                     zindF = y+1;
                 end
                 %end
@@ -318,7 +298,7 @@ for i = vect
                  
                  x_posF = abs(M{r,24}-M{r,24+10});%M{r,24+10};
                  y_posF = abs(M{r,25}-M{r,25+10});%M{r,25+10};
-                 roiF = [x_anF y_anF x_posF y_posF];
+                 roiF = [x_anF y_anF x_posF y_posF]
                  
                  myindices = ~cellfun(@isempty,regexp(M(:,8),[parts.letters,'_','I']));
                  invec = 1:size(M,1);
@@ -332,7 +312,7 @@ for i = vect
 
                      x_posI = abs(M{y,24}-M{y,24+10});%M{y,24+10};
                      y_posI = abs(M{y,25}-M{y,25+10});%M{y,25+10};
-                     roiI = [x_anI y_anI x_posI y_posI];
+                     roiI = [x_anI y_anI x_posI y_posI]
                     zindI = y+1;
                 end
                 %end
@@ -362,49 +342,13 @@ for i = vect
                  x_posI = abs(M{r,24}-M{r,24+10});%M{r,24+10};%segunda puntp (esquina superior izquierda)
                  y_posI = abs(M{r,25}-M{r,25+10});%M{r,25+10};
                  roiI = [x_anI y_anI x_posI y_posI];
-                 zindC = (M{r,1}+1);
-                 if nargin == 4
-                     zindI = zindC-z; %r+1;
-                     zindF = zindC+z;
-                 else
-                     zindI = zindC;
-                     zindF = zindI;
-                 end
-                     
+                 
+                 zindI = M{r,1}+1; %r+1;
+                 zindF = zindI;
                  x_centro = M{r,24} + (abs(M{r,24}-M{r,24+10}))/2;
                  y_centro = M{r,25} + (abs(M{r,25}-M{r,25+10}))/2;
                  
-                 reg=uint16([]);
-                 reg = imcrop(imgSec{g,1},roiI);
-                 Xi = []; Yi=[];
-                 [Xi Yi] = size(reg);
-                 reg=uint16([]);
-                 
-                 if nargin>=5 && w==1 %solo con la condición w=1%% 358 line
-                     
-                   media=42.6864952;
-                   DST=20;
-	
-                    Wi=1;
-
-                    Km = Xi;	
-                    if Km<Yi
-                        Km=Yi;
-                    end
-
-                    if Km>(media-(DST*2)) && Km<(media+(DST*2))
-
-                        h=(Km+DST)/2;
-                        w=(Km+DST)/2;
-
-                    else
-
-                        h=Km/2;%Km;
-                        w=Km/2;%Km;
-                    end
-                 end
-                 
-                 if ((nargin==6 && w~=0) | Wi==1)
+                 if nargin==5
                      
                      x_anI = x_centro-w;
                      y_anI = y_centro-h;
@@ -447,7 +391,7 @@ for i = vect
                     din(str2num(fas)).ypI(zx)=y_posI;
                     
                     din(str2num(fas)).zI(zx)=zindI;
-                    din(str2num(fas)).zF(zx)=zindF;
+                    din(str2num(fas)).zF(zx)=zindI;
                     
                     din(str2num(fas)).xCe(zx)=x_centro;
                     din(str2num(fas)).yCe(zx)=y_centro;
@@ -457,88 +401,60 @@ for i = vect
                      zx =zx+1;
                  end 
              end
-
              %%%%%%%%%% inicia el recorte de la imagen
              %%% calcular cual de los dos cuadros o regiones es mas grades
              %%% y que contega la otra...
              
                  ic=1;
-                 for zz = zindI:zindF % punto
-                    imagen = imgSec{zz,1}; %dicomread(strcat('C:\Disco D\Proyecto de RMI\Imagenes RM\Nueva carpeta\Brest_Mri_2\Brest_Mri - 536763485\sFase3_5359\IM-0039-00',Z,'.dcm'));
+                 for z = zindI:zindF % punto
+                    imagen = imgSec{z,1}; %dicomread(strcat('C:\Disco D\Proyecto de RMI\Imagenes RM\Nueva carpeta\Brest_Mri_2\Brest_Mri - 536763485\sFase3_5359\IM-0039-00',Z,'.dcm'));
                     reg = imcrop(imagen(:,:,1),roiI);
                     region(:,:,ic)=reg;
                     ic=ic+1;
-                    if sh==1
-                        figure(1)
-                        imshow(imagen,[])
-                        hold on
-                        rectangle('Position',roiI,'EdgeColor','r')
-                        plot((x_centro),(y_centro),'+')
-                        pause(0.9)
-                    end
+    % 
+                    figure(1)
+                    imshow(imagen,[])
+                    hold on
+                    rectangle('Position',roiI,'EdgeColor','r')
+                    plot((x_centro),(y_centro),'+')
+                    pause(0.9)
                  end
 
                  [X Y Z] = size(region);
                  for it=1:Z
-                    if sh==1
-                        figure(2)
-                        imshow(region(:,:,it),[]) % punto en la 4
-                        hold on 
-                        plot((x_centro-x_anI),(y_centro-y_anI),'+')%punto de interes.
-                        hold off
-                        pause(0.9)
-                    end
-                    if Z>1
-                        % Redimencionar la imagen
-%                         if Wi==1
-%                             reOrg=uint16([]);
-%                             re=uint16([]);
-%                             reOrg=region;
-%                             re= imresize(region(:,:,it),[128 128]);%imresize(A,[numrows numcols]);
-%                             region=uint16([]);
-%                             region=re;
-%                         end
-                        dicomwrite(region(:,:,it),[subDir,'\',parts.Roi,'_',parts.series,'_',num2str(it),'.dcm']);%%%%
-                    end
+    % 
+                    figure(2)
+                    imshow(region(:,:,it),[]) % punto en la 4
+                    hold on 
+                    plot((x_centro-x_anI),(y_centro-y_anI),'+')%punto de interes.
+                    hold off
+                    pause(0.9)
+
                  end
-                 
-%             Redimencionar el recorte    
-%             if Wi==1 %% 442 line
-%                 reOrg=uint16([]);
-%                 re=uint16([]);
-%                 reOrg=region;
-%                 re= imresize(region,[128 128]);%imresize(A,[numrows numcols]);
-%                 region=uint16([]);
-%                 region=re;
-%             end
             
             % Guardado por serie  
             save([subDir,'\',parts.Roi,'_',parts.series,'.mat'],'region');
             %save([subDir,'\',parts.Roi,'_',parts.series,'.mat'],'region');
-            if Z==1
-                dicomwrite(region,[subDir,'\',parts.Roi,'_',parts.series,'.dcm']);%%%%
-            end
+            dicomwrite(region,[subDir,'\',parts.Roi,'_',parts.series,'.dcm']);%%%%
             % Guardado por ROI
             save([subDir2,'\',parts.Roi,'_',parts.series,'.mat'],'region');
             % save([subDir2,'\',parts.Roi,'_',parts.series,'.mat'],'region');
-            if Z==1
-                dicomwrite(region,[subDir2,'\',parts.Roi,'_',parts.series,'.dcm']);%%%%
-            end
+            dicomwrite(region,[subDir2,'\',parts.Roi,'_',parts.series,'.dcm']);%%%%55
 
-            serie = setfield(serie,[parts.Roi,'_',parts.series],region);
+            serie = setfield(serie,[parts.Roi,'_',parts.series],region)
             
 %             if (strncmp(parts.Roi(2),'N'))
 %                 List_Roi = setfield(List_Roi,'Roi_N',[parts.Roi,'_',parts.series],region)
 %             end
                         
-            List_Roi = setfield(List_Roi,['Roi_',parts.Roi(2)],[parts.Roi,'_',parts.series],region);
+            List_Roi = setfield(List_Roi,['Roi_',parts.Roi(2)],[parts.Roi,'_',parts.series],region)
   
 %                  
 %        %continua trabajando con la region extraida... 
          
          % ...
              
-         fprintf('Estudio : %s',name);fprintf(' - %s', parts.series);fprintf(' - %s',parts.Roi);fprintf('\n');  
+         fprintf(['Estudio : ',name],'\n')    
          end % punto
 
          %k=k+1;
@@ -550,12 +466,12 @@ for i = vect
         
         if strncmp(tip,'DIN',3)%(isempty(pathempty))%else%((length(tip)==length('DINA'))&(tip == 'DINA')) ---->%cuando este vacia significa que cargo la serie dinamic0
          % Separacion del Dinamico en & fases.
-            [List_RoiD dataEstuD] = dinamiwork(imgSec,din,subDir,sh); %dinamiwork(imgSec,din,subDir,w)
+            [List_RoiD dataEstuD] = dinamiwork(imgSec,din,subDir)
         end
         
         if (~strncmp(tip,'DIN',3)&(~isempty(serie))) %(~isempty(pathempty))
             
-            dataEstu = setfield(dataEstu,Cname,serie);
+            dataEstu = setfield(dataEstu,Cname,serie)
         
         elseif (strncmp(tip,'DIN',3))
 
@@ -565,7 +481,7 @@ for i = vect
             %
             band=0;
             if isfield(List_Roi,'Roi_N')
-                band= 1;
+                band= 1
                 dh=getfield(List_RoiD,'Roi_N');
                 for DU=1:length(fieldnames(dataEstuD))
                 List_Roi = setfield(List_Roi,'Roi_N',['RN_Dinamico',num2str(DU)],getfield(dh,['RN_Dinamico',num2str(DU)]));
@@ -598,25 +514,25 @@ for i = vect
         esp = 0;
     end
     mri=strncmp(TAB(:,1),upper(name(8:end)),length(name(7:end))+esp);%strncmp(TAB(:,1),upper([folderPac(1).name(7:10),]),length(folderPac(1).name(7:end))+esp);
-    xt=find(mri);
+    xt=find(mri)
     
      for hp = 1:length(xt)
          if strncmp(TAB{xt(hp),2},['ROI ',num2str(hp)],length(TAB{xt(hp),2}))
-            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'label_1',TAB{xt(hp),17});
-            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'label_2',TAB{xt(hp),18});
-            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'Bi_Rads',str2num(TAB{xt(hp),15}));
-            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'Comentario',TAB{xt(hp),14});
+            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'label_1',TAB{xt(hp),17})
+            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'label_2',TAB{xt(hp),18})
+            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'Bi_Rads',str2num(TAB{xt(hp),15}))
+            List_Roi = setfield(List_Roi,['Roi_',num2str(hp)],'Comentario',TAB{xt(hp),14})
          elseif strncmp(TAB{xt(hp),2},'ROI N',length(TAB{xt(hp),2}))
-             List_Roi = setfield(List_Roi,'Roi_N','label_1',TAB{xt(hp),17});
-             List_Roi = setfield(List_Roi,'Roi_N','label_2',TAB{xt(hp),18});
-             List_Roi = setfield(List_Roi,'Roi_N','Bi_Rads','NA');
-             List_Roi = setfield(List_Roi,'Roi_N','Comentario','NA');
+             List_Roi = setfield(List_Roi,'Roi_N','label_1',TAB{xt(hp),17})
+             List_Roi = setfield(List_Roi,'Roi_N','label_2',TAB{xt(hp),18})
+             List_Roi = setfield(List_Roi,'Roi_N','Bi_Rads','NA')
+             List_Roi = setfield(List_Roi,'Roi_N','Comentario','NA')
          end
      end
      
     
     Roi_Estudios=setfield(Roi_Estudios,name,dataEstu);%setfield(Roi_Estudios,[folderPac(1).name(1:end-1),num2str(i)],dataEstu)
-    Roi_MRI = setfield(Roi_MRI,['Roi_',folderPac(1).name(1:end-1),num2str(i)],List_Roi);
+    Roi_MRI = setfield(Roi_MRI,['Roi_',folderPac(1).name(1:end-1),num2str(i)],List_Roi)
     save([savepaht,'\Regiones','\','Reg_Estuidos','.mat'],'Roi_Estudios');%([Dirname,'\','Reg_Estuidos','.mat'],'Roi_Estudios');%Dirname
     save([savepaht,'\Regiones','\','ROI_Estuidos','.mat'],'Roi_MRI');%([Dirname,'\','ROI_Estuidos','.mat'],'Rois_Ser');phad
     imgSec=[];
