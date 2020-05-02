@@ -6,6 +6,7 @@
 function gbvs_install(dir)
 %pathroot = pwd;
     pathroot = dir;
+    save([dir,'\util\mypath.mat'],'pathroot')
     rootfull = [matlabroot,'\bin\'];
     save([rootfull,'util\mypath.mat'],'pathroot') %save -mat util/mypath.mat pathroot
     addpath(genpath( pathroot ), '-begin');
